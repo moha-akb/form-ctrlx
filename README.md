@@ -12,18 +12,7 @@ npm install --save form-ctrlx
 
 ## Usage
 
-```tsx
-import React, { Component } from 'react'
-
-import MyComponent from 'form-ctrlx'
-import 'form-ctrlx/dist/index.css'
-
-class Example extends Component {
-  render() {
-    return <MyComponent />
-  }
-}
-```
+In Example folder, there is an example of the usage.
 
 ## License
 

@@ -26,7 +26,7 @@ export type FormStateValueChanged<TForm> = FormStateKeys<TForm, boolean>
 
 export interface FormInput<TForm> {
   initialValues: TForm
-  validator?: FormValidatorFunction<TForm>
+  validators?: FormValidatorFunction<TForm>
   handleSubmit?: (values: TForm) => Maybe<FormStateErrors>
   validateOnChange?: boolean
   validateOnMount?: boolean
@@ -44,7 +44,7 @@ export interface FormController<TForm> extends FormState<TForm> {
   setValue: (
     key: keyof TForm & string,
     value: TForm,
-    validator: FormValidatorFunction<TForm>,
+    validator?: FormValidatorFunction<TForm>,
     shouldValidate?: boolean
   ) => void
   setErrors: (errors: FormStateErrors) => void

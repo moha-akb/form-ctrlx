@@ -1,7 +1,6 @@
 import React from 'react';
 import { useFormController } from 'form-ctrlx'
 import { ValidationErrors } from '../../../src/useFormController/types'
-import { debounce } from 'lodash'
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
@@ -29,38 +28,18 @@ export const SingleForm = () => {
         validateOnMount: true,
         validateOnChange: true,
         handleSubmit: handleSubmit,
-        validator: async (values, setPending) => {
+        validators: async (values) => {
           let errors: ValidationErrors = {}
           if (values.confirmPassword !== values.password) {
-            setPending('mismatch')(true)
             errors['mismatch'] = true
           }
           if (Object.keys(errors).length === 0) {
             return null
           }
-          setPending('mismatch')(false)
           return errors
         }
       })
     
-      const handleEmail = (event: React.ChangeEvent<any>) => {
-        const {value} = event.target;
-        signupForm.setValue(
-          'email',
-          value,
-          debounce(async (values, setPending) => {
-            const errors = {};
-            console.log('****', values);
-            setPending('email')(true);
-            await sleep(2000);
-            if(values.email === 'invalid@email.com') {
-                errors['email'] = 'invalid'
-            }
-            setPending('email')(false);
-            return {email: 'not verified'}
-          }, 500)
-        )
-        }
       return (
         <div
           style={{
@@ -76,10 +55,8 @@ export const SingleForm = () => {
                 name='email'
                 id='email'
                 value={signupForm.values.email}
-                onChange={handleEmail}
+                onChange={signupForm.handleChange}
               />
-              <span>* isPending: {String(signupForm.pending.email)}</span>
-              <span>* error: {signupForm.errors && JSON.stringify(signupForm.errors)}</span>
             </div>
             <div className='form-group'>
               <label className='form-label'>Username</label>

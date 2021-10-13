@@ -16,7 +16,7 @@ import { updateFieldSchema, deepEqual, isValueChanged } from '../utils'
 
 export const useFormController = <TForm>({
   initialValues,
-  validator,
+  validators,
   handleSubmit,
   validateOnMount = false,
   validateOnChange = true
@@ -46,8 +46,8 @@ export const useFormController = <TForm>({
   }
 
   React.useEffect(() => {
-    if (validator && validateOnMount) {
-      validateValues(validator, initialValues, setPending).then((errors) => {
+    if (validators && validateOnMount) {
+      validateValues(validators, initialValues, setPending).then((errors) => {
         if (errors) {
           setErrors(errors)
         }
@@ -79,8 +79,8 @@ export const useFormController = <TForm>({
     shouldValidate: boolean = validateOnChange
   ): void => {
     dispatch({ type: 'SET_VALUE', payload: values })
-    if (shouldValidate && validator) {
-      validateValues(validator, values, setPending)
+    if (shouldValidate && validators) {
+      validateValues(validators, values, setPending)
     }
   }
   const handleChange = (event: React.ChangeEvent<any>): void => {
@@ -92,7 +92,7 @@ export const useFormController = <TForm>({
     } else if (type === 'checkbox') {
       value = event.target.checked
     }
-    setValue(field, value)
+    setValue(field, value, validators)
   }
   const hasValueChanged = isValueChanged(state.values, initialValues)
 
